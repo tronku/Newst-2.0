@@ -1,0 +1,54 @@
+package tronku.projects.newst.Utilities
+
+import retrofit2.HttpException
+import retrofit2.Response
+import tronku.projects.newst.Networking.*
+
+
+class NewsRepository {
+
+    private val TAG = "NewsRepository"
+    private var service: NewsApi = RetrofitService.getService()
+
+    suspend fun getNews(country: String): ApiResponse<NewsModel> {
+        if (NewstApp.getInstance().isConnected()) {
+            getHeadlines(country)
+        } else {
+            //offline data fetch
+        }
+    }
+
+    private suspend fun getHeadlines(country: String): ApiResponse<NewsModel> {
+        return safeApiCall(
+            call = { service.getHeadlinesAsync(country) },
+            error = "Error in fetching news..."
+        )
+    }
+
+    suspend fun getNewsFromCategory(category: String): ApiResponse<NewsModel> {
+        return safeApiCall(
+            call = { service.getNewsFromCategoryAsync(category) },
+            error = "Error in fetching news..."
+        )
+    }
+
+    suspend fun getSearchedNews(query: String): ApiResponse<NewsModel> {
+        return safeApiCall(
+            call = { service.getSearchedNewsAsync(query) },
+            error = "Error in fetching news..."
+        )
+    }
+
+    private suspend fun <T: Any> safeApiCall(call: suspend() -> Response<T>, error: String): ApiResponse<T> {
+        return try {
+            val result = call.invoke()
+            if (result.isSuccessful)
+                ApiResponse.Success(result.body()!!)
+            else
+                ApiResponse.Failure(APIError(result.code(), result.message()))
+        } catch (e: HttpException) {
+            ApiResponse.Failure(APIError(null, error))
+        }
+    }
+
+}

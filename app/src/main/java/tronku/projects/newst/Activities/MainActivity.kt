@@ -26,9 +26,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setupViewPager() {
-        adapter.addFragments(DiscoverFragment(), "Discover")
         adapter.addFragments(NewsFragment(), "News")
+        adapter.addFragments(DiscoverFragment(), "Discover")
         viewpager.adapter = adapter
-        viewpager.currentItem = 1
     }
 }
