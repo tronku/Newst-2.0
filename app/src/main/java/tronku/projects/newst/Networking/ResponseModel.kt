@@ -6,16 +6,18 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Entity (tableName = "newsmodel_table")
 data class NewsModel(
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
+
     @Expose
     @SerializedName("articles")
     val articles: ArrayList<Article>?
 )
 
-@Entity(tableName = "article_list")
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
 
     @Expose
     @SerializedName("author")

@@ -9,12 +9,12 @@ import tronku.projects.newst.Networking.NewsModel
 @Dao
 interface NewsDao {
 
-    @Query("SELECT * FROM article_list")
-    fun getNewsFromLocal(): ArrayList<NewsModel>
+    @Query("SELECT * FROM newsmodel_table")
+    suspend fun getNewsFromLocal(): NewsModel?
 
-    @Query("DELETE FROM article_list")
-    fun deleteLocalNews()
+    @Query("DELETE FROM newsmodel_table")
+    suspend fun deleteLocalNews()
 
     @Insert
-    fun insertNewsToLocal(vararg articles: Article)
+    suspend fun insertNewsToLocal(newsModel: NewsModel?)
 }

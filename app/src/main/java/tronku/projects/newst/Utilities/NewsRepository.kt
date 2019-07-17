@@ -1,20 +1,23 @@
 package tronku.projects.newst.Utilities
 
+import android.content.Context
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import retrofit2.Response
+import tronku.projects.newst.Database.NewsDatabase
 import tronku.projects.newst.Networking.*
 
 
-class NewsRepository {
+class NewsRepository(private val context: Context) {
 
     private val TAG = "NewsRepository"
     private var service: NewsApi = RetrofitService.getService()
 
     suspend fun getNews(country: String): ApiResponse<NewsModel> {
-        if (NewstApp.getInstance().isConnected()) {
+        return if (NewstApp.getInstance().isConnected()) {
             getHeadlines(country)
         } else {
-            //offline data fetch
+            ApiResponse.Success(getNewsFromLocal())
         }
     }
 
@@ -48,6 +51,22 @@ class NewsRepository {
                 ApiResponse.Failure(APIError(result.code(), result.message()))
         } catch (e: HttpException) {
             ApiResponse.Failure(APIError(null, error))
+        }
+    }
+
+    fun saveToLocal(newsModel: NewsModel?) {
+        val db = NewsDatabase(context)
+
+        GlobalScope.launch {
+            db.NewsDao().deleteLocalNews()
+            db.NewsDao().insertNewsToLocal(newsModel)
+        }
+    }
+
+    private suspend fun getNewsFromLocal(): NewsModel? {
+        val db = NewsDatabase(context)
+        return withContext(CoroutineScope(Dispatchers.Main).coroutineContext) {
+            db.NewsDao().getNewsFromLocal()
         }
     }
 
