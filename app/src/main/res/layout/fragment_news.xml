@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.NewsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.NewsFragment"
+    android:background="@android:color/white">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
@@ -16,5 +18,82 @@
             android:id="@+id/news_recycler_view"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/api_result"/>
+
+    <RelativeLayout
+        android:id="@+id/loading_layout"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/news_loader"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_fileName="news_loader.json"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/news_loader"
+            android:layout_marginTop="8dp"
+            android:text="Loading news..."
+            android:textColor="#282828"
+            android:layout_centerHorizontal="true"
+            android:textSize="14dp"
+            android:fontFamily="@font/robotothin"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/error_layout"
+        android:layout_gravity="center"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_centerHorizontal="true"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/error_graphic"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_fileName="fetch_error.json"/>
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/error_graphic"
+            android:layout_marginTop="12dp"
+            android:textColor="#282828"
+            android:text="sdgsdg"
+            android:layout_centerHorizontal="true"
+            android:textSize="14dp"
+            android:fontFamily="@font/robotothin"/>
+
+        <Button
+            android:id="@+id/retry_button"
+            android:layout_marginTop="26dp"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:background="@drawable/button_purple"
+            android:text="RETRY"
+            android:textSize="16dp"
+            android:textColor="@android:color/white"
+            android:layout_below="@id/error_text"
+            android:layout_centerHorizontal="true"/>
+
+    </RelativeLayout>
+
 
 </FrameLayout>

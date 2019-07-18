@@ -39,7 +39,7 @@ class NewsViewModel(context: Context): ViewModel() {
                 is ApiResponse.Success -> {
                     mutableIsLoadingLiveData.postValue(false)
                     mutableNewsLiveData.postValue(news.output?.articles)
-                    repository.saveToLocal(news.output)
+//                    repository.saveToLocal(news.output)
                     Log.e(TAG, "SUCCESS - getNews()")
                 }
 

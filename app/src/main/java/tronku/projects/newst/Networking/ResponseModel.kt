@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-@Entity (tableName = "newsmodel_table")
+//@Entity (tableName = "newsmodel_table")
 data class NewsModel(
 
     @PrimaryKey(autoGenerate = true)
@@ -36,7 +36,7 @@ data class Article(
     val publishedAt: String?,
 
     @Expose
-    @Embedded(prefix = "source_")
+//    @Embedded(prefix = "source_")
     @SerializedName("source")
     val source: Source?,
 
@@ -53,6 +53,7 @@ data class Article(
     val urlToImage: String?
 )
 
+@Entity
 data class Source(
     @Expose
     @SerializedName("id")

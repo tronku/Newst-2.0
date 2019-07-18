@@ -4,7 +4,6 @@ import android.content.Context
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import retrofit2.Response
-import tronku.projects.newst.Database.NewsDatabase
 import tronku.projects.newst.Networking.*
 
 
@@ -14,11 +13,12 @@ class NewsRepository(private val context: Context) {
     private var service: NewsApi = RetrofitService.getService()
 
     suspend fun getNews(country: String): ApiResponse<NewsModel> {
-        return if (NewstApp.getInstance().isConnected()) {
-            getHeadlines(country)
-        } else {
-            ApiResponse.Success(getNewsFromLocal())
-        }
+        return  getHeadlines(country)
+//        if (NewstApp.getInstance().isConnected()) {
+//
+//        } else {
+////            ApiResponse.Success(getNewsFromLocal())
+//        }
     }
 
     private suspend fun getHeadlines(country: String): ApiResponse<NewsModel> {
@@ -51,23 +51,25 @@ class NewsRepository(private val context: Context) {
                 ApiResponse.Failure(APIError(result.code(), result.message()))
         } catch (e: HttpException) {
             ApiResponse.Failure(APIError(null, error))
+        } catch (e: Exception) {
+            ApiResponse.Failure(APIError(null, error))
         }
     }
 
-    fun saveToLocal(newsModel: NewsModel?) {
-        val db = NewsDatabase(context)
-
-        GlobalScope.launch {
-            db.NewsDao().deleteLocalNews()
-            db.NewsDao().insertNewsToLocal(newsModel)
-        }
-    }
-
-    private suspend fun getNewsFromLocal(): NewsModel? {
-        val db = NewsDatabase(context)
-        return withContext(CoroutineScope(Dispatchers.Main).coroutineContext) {
-            db.NewsDao().getNewsFromLocal()
-        }
-    }
+//    fun saveToLocal(newsModel: NewsModel?) {
+//        val db = NewsDatabase(context)
+//
+//        GlobalScope.launch {
+//            db.newsDao().deleteLocalNews()
+//            db.newsDao().insertNewsToLocal(newsModel)
+//        }
+//    }
+//
+//    private suspend fun getNewsFromLocal(): NewsModel? {
+//        val db = NewsDatabase(context)
+//        return withContext(CoroutineScope(Dispatchers.Main).coroutineContext) {
+//            db.newsDao().getNewsFromLocal()
+//        }
+//    }
 
 }
